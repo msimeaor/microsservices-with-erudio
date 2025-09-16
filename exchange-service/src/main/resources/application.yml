@@ -3,3 +3,11 @@ server:
 spring:
   application:
     name: exchange-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/exchange_microservice
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: none

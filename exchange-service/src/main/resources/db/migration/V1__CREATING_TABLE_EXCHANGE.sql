@@ -1,0 +1,7 @@
+CREATE TABLE exchange (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  conversion_factor DECIMAL(11,2) DEFAULT NULL,
+  from_currency VARCHAR(3) DEFAULT NULL,
+  to_currency VARCHAR(3) DEFAULT NULL,
+  PRIMARY KEY (id)
+)
