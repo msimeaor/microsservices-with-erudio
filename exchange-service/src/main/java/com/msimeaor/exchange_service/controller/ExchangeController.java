@@ -2,6 +2,9 @@ package com.msimeaor.exchange_service.controller;
 
 import com.msimeaor.exchange_service.environment.InstanceInformationService;
 import com.msimeaor.exchange_service.model.Exchange;
+import com.msimeaor.exchange_service.repository.ExchangeRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,19 +17,29 @@ import java.math.BigDecimal;
 public class ExchangeController {
 
   private InstanceInformationService informationService;
+  private ExchangeRepository repository;
 
-  public ExchangeController(InstanceInformationService informationService) {
+  public ExchangeController(InstanceInformationService informationService,
+                            ExchangeRepository repository) {
+
     this.informationService = informationService;
+    this.repository = repository;
   }
 
   // http://localhost:8000/exchange-service/5/USD/BRL
   @GetMapping("/{amount}/{from}/{to}")
-  public Exchange getExchange(@PathVariable("amount") BigDecimal amount,
-                              @PathVariable("amount") String from,
-                              @PathVariable("amount") String to) {
+  public ResponseEntity<?> getExchange(@PathVariable("amount") BigDecimal amount,
+                                       @PathVariable("from") String from,
+                                       @PathVariable("to") String to) {
 
+    Exchange exchange = repository.findByFromAndTo(from, to);
+    if (exchange == null) return new ResponseEntity<>("Impossível realizar cambio!", HttpStatus.NOT_FOUND);
 
-    return new Exchange(1L, from, to, BigDecimal.ONE, BigDecimal.ONE, "PORT: " + informationService.getPort());
+    BigDecimal convertedValue = exchange.getConversionFactor().multiply(amount);
+    exchange.setConvertedValue(convertedValue);
+    exchange.setEnvironment("PORT: " + informationService.getPort());
+
+    return new ResponseEntity<>(exchange, HttpStatus.OK);
   }
 
 }

@@ -21,7 +21,7 @@ public class Exchange implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
-  private long id;
+  private Long id;
 
   @Column(name = "from_currency", length = 3)
   private String from;
