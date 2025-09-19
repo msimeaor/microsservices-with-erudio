@@ -28,12 +28,12 @@ public class ExchangeController {
 
   // http://localhost:8000/exchange-service/5/USD/BRL
   @GetMapping("/{amount}/{from}/{to}")
-  public ResponseEntity<?> getExchange(@PathVariable("amount") BigDecimal amount,
+  public ResponseEntity<Exchange> getExchange(@PathVariable("amount") BigDecimal amount,
                                        @PathVariable("from") String from,
                                        @PathVariable("to") String to) {
 
     Exchange exchange = repository.findByFromAndTo(from, to);
-    if (exchange == null) return new ResponseEntity<>("Impossível realizar cambio!", HttpStatus.NOT_FOUND);
+    if (exchange == null) throw new RuntimeException("Impossível realizar o câmbio");
 
     BigDecimal convertedValue = exchange.getConversionFactor().multiply(amount);
     exchange.setConvertedValue(convertedValue);
