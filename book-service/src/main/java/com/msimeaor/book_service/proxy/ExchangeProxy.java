@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 
-@FeignClient(name = "exchange-service", url = "localhost:8000")
+@FeignClient(name = "exchange-service")
 public interface ExchangeProxy {
 
   @GetMapping("/exchange-service/{amount}/{from}/{to}")

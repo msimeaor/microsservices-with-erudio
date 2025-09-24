@@ -39,7 +39,9 @@ public class BookController {
 
     Exchange exchange = proxy.getExchange(book.getPrice(), "USD", currency).getBody();
 
-    book.setEnvironment(informationService.getPort());
+    //book.setEnvironment(informationService.getPort());
+    book.setEnvironment("BOOK PORT: " + informationService.getPort() +
+            " / EXCHANGE PORT: " + exchange.getEnvironment());
     book.setCurrency(currency);
     book.setPrice(exchange.getConvertedValue());
 
