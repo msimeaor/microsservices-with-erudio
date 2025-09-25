@@ -3,6 +3,10 @@ package com.msimeaor.exchange_service.controller;
 import com.msimeaor.exchange_service.environment.InstanceInformationService;
 import com.msimeaor.exchange_service.model.Exchange;
 import com.msimeaor.exchange_service.repository.ExchangeRepository;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +31,10 @@ public class ExchangeController {
   }
 
   // http://localhost:8000/exchange-service/5/USD/BRL
+  //@Retry(name = "default", fallbackMethod = "fallbackMethod")
+  //@RateLimiter(name = "default", fallbackMethod = "fallbackMethod")
+  //@CircuitBreaker(name = "default", fallbackMethod = "fallbackMethod")
+  //@Bulkhead(name = "default")
   @GetMapping("/{amount}/{from}/{to}")
   public ResponseEntity<Exchange> getExchange(@PathVariable("amount") BigDecimal amount,
                                        @PathVariable("from") String from,
